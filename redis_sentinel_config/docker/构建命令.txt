@@ -1,0 +1,12 @@
+在Dockerfile目录，构建镜像：
+docker build -t redis-sentinel:v1.1 .
+
+若不使用kubernetes，单台物理机，起容器：
+docker run -t -i -d -e "REDIS_TYPE=MASTER" -e -p7022:22 -p7000:7000 redis-sentinel:v1.1
+docker run -t -i -d -e "REDIS_TYPE=SLAVE" -e "REDIS_MASTER_IP=$master_ip" -p7122:22 -p7100:7000 redis-sentinel:v1.1
+docker run -t -i -d -e "REDIS_TYPE=SLAVE" -e "REDIS_MASTER_IP=$master_ip" -p7222:22 -p7200:7000 redis-sentinel:v1.1
+docker run -t -i -d -e "REDIS_TYPE=SENTINEL" -e "REDIS_MASTER_IP=$master_ip" -p27022:22 -p27003:7003 redis-sentinel:v1.1
+docker run -t -i -d -e "REDIS_TYPE=SENTINEL" -e "REDIS_MASTER_IP=$master_ip" -p27122:22  -p27103:7003 redis-sentinel:v1.1
+docker run -t -i -d -e "REDIS_TYPE=SENTINEL" -e "REDIS_MASTER_IP=$master_ip" -p27222:22 -p27203:7003 redis-sentinel:v1.1
+
+注：$master_ip为MASTER节点起服时，docker给MASTER节点分配的内网地址
